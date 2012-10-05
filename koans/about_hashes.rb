@@ -22,8 +22,8 @@ class AboutHashes < EdgeCase::Koan
 
   def test_accessing_hashes_with_fetch
     hash = { :one => "uno" }
-    assert_equal "eins", hash.fetch(:one)
-    assert_raise("not found") do
+    assert_equal "uno", hash.fetch(:one)
+    assert_raise(KeyError) do
       hash.fetch(:doesnt_exist)
     end
 
@@ -37,7 +37,7 @@ class AboutHashes < EdgeCase::Koan
     hash[:one] = "eins"
 
     expected = { :one => "eins", :two => "dos" }
-    assert_equal true, hash
+    assert_equal expected, hash
 
     # Bonus Question: Why was "expected" broken out into a variable
     # rather than used as a literal?
@@ -87,7 +87,7 @@ class AboutHashes < EdgeCase::Koan
     hash2[:one] = 1
 
     assert_equal 1, hash2[:one]
-    assert_equal nil, hash2[:two]
+    assert_equal "dos", hash2[:two]
   end
 
   def test_default_value_is_the_same_object
@@ -96,11 +96,11 @@ class AboutHashes < EdgeCase::Koan
     hash[:one] << "uno"
     hash[:two] << "dos"
 
-    assert_equal "uno", hash[:one]
-    assert_equal "dos", hash[:two]
-    assert_equal nil, hash[:three]
+    assert_equal ["uno", "dos"], hash[:one]
+    assert_equal ["uno", "dos"], hash[:two]
+    assert_equal ["uno", "dos"], hash[:three]
 
-    assert_equal false, hash[:one].object_id == hash[:two].object_id
+    assert_equal true, hash[:one].object_id == hash[:two].object_id
   end
 
   def test_default_value_with_block
@@ -109,8 +109,8 @@ class AboutHashes < EdgeCase::Koan
     hash[:one] << "uno"
     hash[:two] << "dos"
 
-    assert_equal "uno", hash[:one]
-    assert_equal "dos", hash[:two]
-    assert_equal nil, hash[:three]
+    assert_equal ["uno"], hash[:one]
+    assert_equal ["dos"], hash[:two]
+    assert_equal [], hash[:three]
   end
 end
